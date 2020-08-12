@@ -1,0 +1,14 @@
+{
+  "name": "mbedLCD",
+  "keywords": "mbed, mbed 6, lcd, HD44780, TextLCD",
+  "description": "A mbed 6 library for text LCDs with HD44780.",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/sstaub/mbedLCD"
+  },
+  "version": "1.0.0",
+  "frameworks": "mbed",
+  "platforms": "*"
+}
+
