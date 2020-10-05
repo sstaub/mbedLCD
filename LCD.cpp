@@ -24,7 +24,8 @@
 #include "LCD.h"
 #include "mbed.h"
 
-LCD::LCD(PinName rs, PinName e, PinName d4, PinName d5, PinName d6, PinName d7, lcd_t type) : _rs(rs), _e(e), _d(d4, d5, d6, d7), _type(type) {
+LCD::LCD(PinName rs, PinName en, PinName d4, PinName d5, PinName d6, PinName d7, lcd_t type) : reset(rs), enable(en), data(d4, d5, d6, d7) {
+	this->type = type;
 
 	ThisThread::sleep_for(15ms); // Wait 15ms to ensure powered up
 
@@ -151,31 +152,31 @@ int LCD::_getc() {
 	}
 
 void LCD::writeByte(uint8_t value) {
-	_d = value >> 4;
+	data = value >> 4;
 	wait_us(1); // most instructions take 40us
-	_e = 0;
+	enable = 0;
 	wait_us(1);
-	_e = 1;
-	_d = value >> 0;
+	enable = 1;
+	data = value;
 	wait_us(1);
-	_e = 0;
+	enable = 0;
 	wait_us(1);
-	_e = 1;
+	enable = 1;
 	wait_us(40);
 	}
 
 void LCD::writeCommand(uint8_t command) {
-	_rs = 0;
+	reset = 0;
 	writeByte(command);
 	}
 
 void LCD::writeData(uint8_t data) {
-	_rs = 1;
+	reset = 1;
 	writeByte(data);
 	}
 
 uint8_t LCD::address(uint8_t column, uint8_t row) {
-	switch (_type) {
+	switch (type) {
 		case LCD20x4:
 			switch (row) {
 				case 0:
@@ -198,7 +199,7 @@ uint8_t LCD::address(uint8_t column, uint8_t row) {
 	}
 
 uint8_t LCD::columns() {
-	switch (_type) {
+	switch (type) {
 		case LCD20x4:
 		case LCD20x2:
 		case LCD40x2:
@@ -210,7 +211,7 @@ uint8_t LCD::columns() {
 	}
 
 uint8_t LCD::rows() {
-	switch (_type) {
+	switch (type) {
 		case LCD20x4:
 			return 4;
 		case LCD16x2:

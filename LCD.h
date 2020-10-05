@@ -118,7 +118,7 @@ class LCD : public Stream {
 		 * @param d4-d7 Data lines for using as a 4-bit interface
 		 * @param type  Sets the panel size/addressing mode (default = LCD16x2)
 		 */
-		LCD(PinName rs, PinName e, PinName d4, PinName d5, PinName d6, PinName d7, lcd_t type = LCD16x2);
+		LCD(PinName rs, PinName en, PinName d4, PinName d5, PinName d6, PinName d7, lcd_t type = LCD16x2);
 
 		/**
 		 * @brief Clear the screen and locate to 0,0
@@ -192,9 +192,9 @@ class LCD : public Stream {
 		void writeCommand(uint8_t command);
 		void writeData(uint8_t data);
 
-		DigitalOut _rs, _e;
-		BusOut _d;
-		lcd_t _type;
+		DigitalOut reset, enable;
+		BusOut data;
+		lcd_t type;
 
 		uint8_t displaycontrol;
 		uint8_t displaymode;
