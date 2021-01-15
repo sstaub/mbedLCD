@@ -11,7 +11,8 @@ This library is for the HD47780 LCDs with 4-bit interface for use with mbed 6
 
 
 ## Example
-Here is a simple example which shows the capabilities of the display 
+Here is a simple example which shows the capabilities of the display
+
 ```cpp
 // example for mbed6 LCD library
 
@@ -134,44 +135,139 @@ following display types are supported
 - **LCD20x4** 20x4 LCD panel
 - **LCD40x2** 40x2 LCD panel
 
-
 ## Constructor
 create a LCD object
-**LCD(PinName rs, PinName en, PinName d4, PinName d5, PinName d6, PinName d7, lcd_t type = LCD16x2)**<br>
+
+```cpp
+LCD::LCD(PinName rs, PinName en, PinName d4, PinName d5, PinName d6, PinName d7, lcd_t type = LCD16x2)
+```
+
+create a LCD object
+
 - **rs** reset pin
 - **en** enable pin
 - **d4** thru **d7** data pins
 - **type** display type
 
-## Functions
+**Example**
 
-### **void cls()**
-clear the screen, set cursor to home
+```cpp
+LCD lcd(D0, D1, D2, D3, D4, D5, LCD16x2); // rs, en, d4-d7, LCD type
+``
 
-### **void display(modes_t display)**
+## Class Functions
+
+### Clear Screen
+
+```cpp
+void LCDi2c::cls()
+```
+clears the screen, set cursor to home
+
+**Example**
+
+```cpp
+lcd.cls();
+```
+
+### Display Modes
+
+```cpp
+void LCDi2c::display(modes_t mode)
+```
+
 set the modes of the display
 
-- DISPLAY_ON Turn the display on
-- DISPLAY_OFF Turn the display off
-- CURSOR_ON Turns the underline cursor on
-- CURSOR_OFF Turns the underline cursor off
-- BLINK_ON Turn the blinking cursor on
-- BLINK_OFF Turn the blinking cursor off
-- SCROLL_LEFT These command scroll the display without changing the RAM
-- SCROLL_RIGHT These commands scroll the display without changing the RAM
-- LEFT_TO_RIGHT This is for text that flows Left to Right
-- RIGHT_TO_LEFT This is for text that flows Right to Left
-- AUTOSCROLL_ON This will 'right justify' text from the cursor
-- AUTOSCROLL_OFF This will 'left justify' text from the cursor
+- DISPLAY_ON turn the display on
+- DISPLAY_OFF turn the display off
+- CURSOR_ON turn the underline cursor on
+- CURSOR_OFF turn the underline cursor off
+- BLINK_ON turn the blinking cursor on
+- BLINK_OFF turn the blinking cursor off
+- SCROLL_LEFT these command scroll the display without changing the RAM
+- SCROLL_RIGHT these command scroll the display without changing the RAM
+- LEFT_TO_RIGHT this is for text that flows Left to Right
+- RIGHT_TO_LEFT this is for text that flows Right to Left
+- AUTOSCROLL_ON this will 'right justify' text from the cursor
+- AUTOSCROLL_OFF this will 'left justify' text from the cursor
 
-### **void locate(uint8_t column, uint8_t row)**
+**Example**
+
+```cpp
+lcd.display(CURSOR_ON);
+```
+
+### Cursor Location
+
+```cpp
+void LCDi2c::locate(uint8_t column, uint8_t row)
+```
+
 set poition of the cursor
 
-### **void home()**
+- **column** position column
+- **row** position row
+
+**Example**
+
+```cpp
+lcd.locate(0, 0);
+```
+
+### Cursor Home
+
+```cpp
+void LCDi2c::home()
+```
 set cursor to home position (0/0)
 
-### **void create(uint8_t location, uint8_t charmap[])**
+**Example**
+
+```cpp
+lcd.home();
+```
+
+### User defined chars
+
+```cpp
+void LCDi2c::create(uint8_t location, uint8_t charmap[])
+```
+
 Create a user defined char object allows us to fill the first 8 CGRAM locations with custom characters
 
-### **void character(uint8_t column, uint8_t row, uint8_t c)**
+- **loacation** number 0 - 7
+- **charmap** array which contains the char
+
+**Example**
+
+```cpp
+uint8_t upArrow[8] = {  
+	0b00100,
+	0b01010,
+	0b10001,
+	0b00100,
+	0b00100,
+	0b00100,
+	0b00000,
+	};
+
+lcd.create(0, downArrow);
+```
+
+### Character
+
+```cpp
+void LCDi2c::character(uint8_t column, uint8_t row, uint8_t c) 
+```
+
 draw a single character on given position, usefull for user chars
+
+- **column** position column
+- **row** position row
+- **c** number of the user char
+
+**Example**
+
+```cpp
+lcd.character(0, 1, 0);
+```
