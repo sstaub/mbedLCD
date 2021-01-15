@@ -160,7 +160,7 @@ LCD lcd(D0, D1, D2, D3, D4, D5, LCD16x2); // rs, en, d4-d7, LCD type
 ### Clear Screen
 
 ```cpp
-void LCDi2c::cls()
+void LCD::cls()
 ```
 clears the screen, set cursor to home
 
@@ -173,7 +173,7 @@ lcd.cls();
 ### Display Modes
 
 ```cpp
-void LCDi2c::display(modes_t mode)
+void LCD::display(modes_t mode)
 ```
 
 set the modes of the display
@@ -200,7 +200,7 @@ lcd.display(CURSOR_ON);
 ### Cursor Location
 
 ```cpp
-void LCDi2c::locate(uint8_t column, uint8_t row)
+void LCD::locate(uint8_t column, uint8_t row)
 ```
 
 set poition of the cursor
@@ -217,7 +217,7 @@ lcd.locate(0, 0);
 ### Cursor Home
 
 ```cpp
-void LCDi2c::home()
+void LCD::home()
 ```
 set cursor to home position (0/0)
 
@@ -230,7 +230,7 @@ lcd.home();
 ### User defined chars
 
 ```cpp
-void LCDi2c::create(uint8_t location, uint8_t charmap[])
+void LCD::create(uint8_t location, uint8_t charmap[])
 ```
 
 Create a user defined char object allows us to fill the first 8 CGRAM locations with custom characters
@@ -257,7 +257,7 @@ lcd.create(0, downArrow);
 ### Character
 
 ```cpp
-void LCDi2c::character(uint8_t column, uint8_t row, uint8_t c) 
+void LCD::character(uint8_t column, uint8_t row, uint8_t c) 
 ```
 
 draw a single character on given position, usefull for user chars
