@@ -63,7 +63,8 @@ uint8_t leftArrow[8] = {
 LCD lcd(D0, D1, D2, D3, D4, D5, LCD16x2); // rs, en, d4-d7, LCD type
 
 int main() {
-	
+	lcd.init();
+
 	lcd.create(0, downArrow);
 	lcd.create(1, upArrow);
 	lcd.create(2, rightArrow);

@@ -39,6 +39,7 @@
  * LCD lcd(p10, p12, p15, p16, p29, p30); // rs, e, d4-d7
  *
  * int main() {
+ *   lcd.init();
  *   lcd.printf("Hello World!\n");
  * }
  * @endcode
@@ -137,13 +138,15 @@ class LCD : public Stream {
     void character(uint8_t column, uint8_t row, uint8_t c);
 
   protected:
-    enum lcd_control_t {
-        CTRL_DISPLAY_ON            = 0x04,
-        CTRL_DISPLAY_OFF           = 0x00,
-        CTRL_CURSOR_ON             = 0x02,
-        CTRL_CURSOR_OFF            = 0x00,
-        CTRL_BLINK_ON              = 0x01,
-        CTRL_BLINK_OFF             = 0x00,
+    enum lcd_command_t {
+        CMD_CLEAR_DISPLAY   = 0x01,
+        CMD_RETURN_HOME     = 0x02,
+        CMD_ENTRY_MODE_SET  = 0x04,
+        CMD_DISPLAY_CONTROL = 0x08,
+        CMD_CURSOR_SHIFT    = 0x10,
+        CMD_FUNCTION_SET    = 0x20,
+        CMD_SET_CGRAM_ADDR  = 0x40,
+        CMD_SET_DDRAM_ADDR  = 0x80,
     };
 
     // Stream implementation functions
@@ -160,25 +163,24 @@ class LCD : public Stream {
     DigitalOut   _en;
     DigitalInOut *_rw;
     BusOut _data;
-    lcd_type_t _type;
+    lcd_type_t _type = LCD16x2;
 
     uint8_t _display_control = CTRL_DISPLAY_OFF | CTRL_CURSOR_OFF | CTRL_BLINK_OFF;
     uint8_t _display_mode = ENTRY_MODE_LEFT | ENTRY_MODE_SHIFT_DECREMENT;
 
-    uint8_t _column;
-    uint8_t _row;
+    uint8_t _column = 0;
+    uint8_t _row = 0;
 
-    enum lcd_command_t {
-        CMD_CLEAR_DISPLAY   = 0x01,
-        CMD_RETURN_HOME     = 0x02,
-        CMD_ENTRY_MODE_SET  = 0x04,
-        CMD_DISPLAY_CONTROL = 0x08,
-        CMD_CURSOR_SHIFT    = 0x10,
-        CMD_FUNCTION_SET    = 0x20,
-        CMD_SET_CGRAM_ADDR  = 0x40,
-        CMD_SET_DDRAM_ADDR  = 0x80,
-    };
   private:
+    enum lcd_control_t {
+        CTRL_DISPLAY_ON            = 0x04,
+        CTRL_DISPLAY_OFF           = 0x00,
+        CTRL_CURSOR_ON             = 0x02,
+        CTRL_CURSOR_OFF            = 0x00,
+        CTRL_BLINK_ON              = 0x01,
+        CTRL_BLINK_OFF             = 0x00,
+    };
+
     enum lcd_function_t {
         FN_8BIT_MODE = 0x10,
         FN_4BIT_MODE = 0x00,
