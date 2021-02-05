@@ -220,9 +220,6 @@ uint8_t LCD::getAddress(uint8_t column, uint8_t row) {
                     return -1;
             }
 
-        case LCD16x2:
-        case LCD20x2:
-        case LCD40x2:
         default:
             return 0x80 + (row * 0x40) + column;
     }
@@ -235,7 +232,9 @@ uint8_t LCD::columns() {
         case LCD40x2:
             return 20;
 
-        case LCD16x2:
+        case LCD8x2:
+            return 8;
+
         default:
             return 16;
     }
@@ -246,36 +245,33 @@ uint8_t LCD::rows() {
         case LCD20x4:
             return 4;
 
-        case LCD16x2:
-        case LCD20x2:
-        case LCD40x2:
         default:
             return 2;
     }
 }
 
 void LCD::writeCommand(uint8_t command) {
-    _rs = 0;
+    _rs.write(0);
     writeByte(command);
 }
 
 void LCD::writeData(uint8_t data) {
-    _rs = 1;
+    _rs.write(1);
     writeByte(data);
 }
 
 void LCD::writeByte(uint8_t value) {
-    _data = value >> 4; // send upper part first
+    _data.write(value >> 4); // send upper part first
     pulseEnable();
-    _data = value;
+    _data.write(value & 0b1111);
     pulseEnable();
 }
 
 void LCD::pulseEnable() {
-    _en = 0;
+    _en.write(0);
     wait_us(1);
-    _en = 1;
+    _en.write(1);
     wait_us(1);
-    _en = 0;
+    _en.write(0);
     wait_us(40);
 }

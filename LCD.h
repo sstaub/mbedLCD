@@ -30,7 +30,7 @@
 
 /**
  * @brief A TextLCD interface for driving 4-bit HD44780-based LCDs
- *Currently supports 16x2, 20x2 and 20x4 panels
+ *Currently supports 8x2, 16x2, 20x2 and 20x4 panels
  *
  * @code
  * #include "mbed.h"
@@ -40,14 +40,16 @@
  *
  * int main() {
  *   lcd.init();
- *   lcd.printf("Hello World!\n");
+ *   lcd.display(LCD::DISPLAY_ON)
+ *   lcd.printf("Hello World!");
  * }
  * @endcode
  */
 class LCD : public Stream {
   public:
     enum lcd_type_t {
-        LCD16x2,  // 16x2 LCD panel (default)
+        LCD8x2,   // 8x2 LCD panel
+        LCD16x2,  // 16x2 LCD panel
         LCD20x2,  // 20x2 LCD panel
         LCD20x4,  // 20x4 LCD panel
         LCD40x2   // 40x2 LCD panel
@@ -63,7 +65,7 @@ class LCD : public Stream {
         SCROLL_LEFT, // These command scroll the display without changing the RAM
         SCROLL_RIGHT, // These commands scroll the display without changing the RAM
         LEFT_TO_RIGHT, // This is for text that flows Left to right
-        RIGHT_TO_LEFT, // This is for text that flows right to lLeft
+        RIGHT_TO_LEFT, // This is for text that flows right to left
         SCROLL_ON, // This will 'right justify' text from the cursor
         SCROLL_OFF, // This will 'left justify' text from the cursor
     };
@@ -120,8 +122,7 @@ class LCD : public Stream {
 
     /**
      * @brief Create a user defined char object
-     * Allows us to fill the first 8 CGRAM locations
-     * with custom characters
+     * Allows us to fill the first 8 CGRAM locations with custom characters
      *
      * @param location
      * @param charmap
@@ -137,6 +138,20 @@ class LCD : public Stream {
      */
     void character(uint8_t column, uint8_t row, uint8_t c);
 
+    /**
+     * @brief Get number of rows
+     *
+     * @return row count
+     */
+    uint8_t rows();
+
+    /**
+     * @brief Get number of columns
+     *
+     * @return column count
+     */
+    uint8_t columns();
+
   protected:
     enum lcd_command_t {
         CMD_CLEAR_DISPLAY   = 0x01,
@@ -149,27 +164,8 @@ class LCD : public Stream {
         CMD_SET_DDRAM_ADDR  = 0x80,
     };
 
-    // Stream implementation functions
-    virtual int _putc(int value);
-    virtual int _getc();
-
-    uint8_t rows();
-    uint8_t columns();
-    void writeByte(uint8_t value);
     void writeCommand(uint8_t command);
     void writeData(uint8_t data);
-
-    DigitalOut   _rs;
-    DigitalOut   _en;
-    DigitalInOut *_rw;
-    BusOut _data;
-    lcd_type_t _type = LCD16x2;
-
-    uint8_t _display_control = CTRL_DISPLAY_OFF | CTRL_CURSOR_OFF | CTRL_BLINK_OFF;
-    uint8_t _display_mode = ENTRY_MODE_LEFT | ENTRY_MODE_SHIFT_DECREMENT;
-
-    uint8_t _column = 0;
-    uint8_t _row = 0;
 
   private:
     enum lcd_control_t {
@@ -204,6 +200,23 @@ class LCD : public Stream {
         MOVE_LEFT    = 0x00,
     };
 
+    DigitalOut   _rs;
+    DigitalOut   _en;
+    DigitalInOut *_rw;
+    BusOut _data;
+    const lcd_type_t _type = LCD16x2;
+
+    uint8_t _display_control = CTRL_DISPLAY_OFF | CTRL_CURSOR_OFF | CTRL_BLINK_OFF;
+    uint8_t _display_mode = ENTRY_MODE_LEFT | ENTRY_MODE_SHIFT_DECREMENT;
+
+    uint8_t _column = 0;
+    uint8_t _row = 0;
+
+    // Stream implementation functions
+    int _putc(int value);
+    int _getc();
+
+    void writeByte(uint8_t value);
     void pulseEnable();
     uint8_t getAddress(uint8_t column, uint8_t row);
 };
