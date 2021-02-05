@@ -25,10 +25,8 @@
 #include "LCD.h"
 #include "mbed.h"
 
-LCD::LCD(PinName rs, PinName en, PinName d4, PinName d5, PinName d6, PinName d7, lcd_type_t type, PinName rw):
-    _rs(rs), _en(en), _data(d4, d5, d6, d7) {
-    _type = type;
-
+LCD::LCD(PinName rs, PinName en, PinName d4, PinName d5, PinName d6, PinName d7, PinName rw, lcd_type_t type):
+    _rs(rs), _en(en), _data(d4, d5, d6, d7), _type(type) {
     if (rw != NC) {
         _rw = new DigitalInOut(rw);
         _rw->write(1);
@@ -74,6 +72,7 @@ void LCD::init() {
     _display_mode = ENTRY_MODE_LEFT | ENTRY_MODE_SHIFT_DECREMENT;
     writeCommand(CMD_ENTRY_MODE_SET | _display_mode);
 }
+
 void LCD::character(uint8_t column, uint8_t row, uint8_t c) {
     uint8_t addr = getAddress(column, row);
     writeCommand(addr);

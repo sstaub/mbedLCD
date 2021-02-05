@@ -61,8 +61,9 @@ uint8_t leftArrow[8] = {
 LCD lcd(D0, D1, D2, D3, D4, D5, LCD::LCD16x2); // rs, en, d4-d7, LCD type
 
 int main() {
-    ThisThread::sleep_for(50ms); // it takes a long time after power up
+    ThisThread::sleep_for(50ms); // wait for a long time after power up
     lcd.init();
+    lcd.display(LCD::DISPLAY_ON);
 
     lcd.create(0, downArrow);
     lcd.create(1, upArrow);
