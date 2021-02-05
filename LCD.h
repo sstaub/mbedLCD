@@ -76,7 +76,7 @@ class LCD : public Stream {
      * @param rs    Instruction/data control line
      * @param e     Enable line (clock)
      * @param d4-d7 Data lines for using as a 4-bit interface
-     * @param rw    R/W pin (deafult = NC)
+     * @param rw    R/W pin (default = NC)
      * @param type  Sets the panel size/addressing mode (default = LCD16x2)
      */
     LCD(PinName rs, PinName en, PinName d4, PinName d5, PinName d6, PinName d7, PinName rw = NC, lcd_type_t type = LCD16x2);
