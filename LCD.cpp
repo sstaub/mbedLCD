@@ -157,6 +157,8 @@ void LCD::display(lcd_mode_t mode) {
             writeCommand(CMD_ENTRY_MODE_SET | _display_mode);
             break;
     }
+
+    ThisThread::sleep_for(3ms);
 }
 
 void LCD::create(uint8_t location, uint8_t charmap[]) {
