@@ -28,9 +28,11 @@
 LCD::LCD(PinName rs, PinName en, PinName d4, PinName d5, PinName d6, PinName d7, PinName rw, lcd_type_t type):
     _rs(rs), _en(en), _data(d4, d5, d6, d7), _type(type) {
     if (rw != NC) {
-        _rw = new DigitalInOut(rw);
+        _rw = new DigitalOut(rw);
         _rw->write(1);
     }
+
+    _data.write(0);
 }
 
 LCD::~LCD() {

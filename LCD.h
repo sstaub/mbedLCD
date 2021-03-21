@@ -200,9 +200,9 @@ class LCD : public Stream {
         MOVE_LEFT    = 0x00,
     };
 
-    DigitalOut   _rs;
-    DigitalOut   _en;
-    DigitalInOut *_rw;
+    DigitalOut _rs;
+    DigitalOut _en;
+    DigitalOut *_rw;
     BusOut _data;
     const lcd_type_t _type = LCD16x2;
 
